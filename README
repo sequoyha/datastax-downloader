@@ -48,8 +48,6 @@ $ sudo ln -s ~/path/to/datastax-downloader/get-datastax /usr/local/bin/get-datas
 
 To run:
 -----------------
-
-
 $ get-datastax <product_code> <version_number>
 
 Product codes:
