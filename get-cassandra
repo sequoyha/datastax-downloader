@@ -1,0 +1,124 @@
+#!/bin/bash
+
+product=$1
+version=$2
+
+communitypath='/conf/'
+entpath='/resources/cassandra/conf/'
+source ~/.getcassandra.cfg
+
+user=$username
+pass=$pwd
+dsxdir=$datastax_dir
+logback=false
+
+function linux_edits() 
+{
+	echo "Logback is " $logback
+    	sed -i  "s:/var/lib/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/cassandra.yaml 
+    	if [ $logback == true ]; then
+    		echo "In C2.1 edits"
+    		sed -i  "s:\${cassandra.logdir}:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}logback.xml 
+    	else
+		echo "In non C 2.1 edits"
+			sed -i  "s:/var/log/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties #change to logback stuff
+    	fi
+}
+
+function mac_edits() 
+{
+	echo "Logback is " $logback
+	sed -i  _bk "s:/var/lib/cassandra:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/cassandra.yaml 
+	if [ $logback == true ]; then
+		echo "In C2.1 edits"
+		sed -i  _bk "s:\${cassandra.logdir}:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}logback.xml
+	else
+		echo "In non C 2.1 edits"
+		sed -i  _bk "s:/var/log/cassandra:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties #change to logback stuff
+	fi
+}
+function community_check()
+{
+	thisversion=${version:0:1}${version:2:1}
+	if [ "${thisversion}" -ge 21 ]; then
+		logback=true
+	fi
+ }
+
+ function enterprise_check()
+ {
+ 	thisversion=${version:0:1}${version:2:1}
+ 	if [ ""${thisversion}"" -ge 47 ]; then
+		logback=true
+	fi
+ }
+
+
+echo ${version:0:1}
+
+if [ $product = dsc ]; then
+ 	echo "Downloading DataStax Community ${version}"
+ 	confpath=$communitypath
+ 	ctype=community
+	curl -L http://downloads.datastax.com/community/dsc-cassandra-${version}-bin.tar.gz | tar xz
+
+	if [ ! -d "${dsxdir}community" ]; then
+		mkdir -p ${dsxdir}community
+	fi
+
+	mv dsc-cassandra-${version} ${dsxdir}community/${version}
+	community_check
+	#Need slightly different args for sed since Linux and Mac(BSD) operate with diff args
+	if [ "$(uname)" == "Linux" ]; then
+		linux_edits  #$version
+		#sed -i  "s:/var/lib/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/cassandra.yaml
+		#sed -i  "s:/var/log/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/log4j-server.properties 
+	elif [ "$(uname)" == "Darwin" ]; then
+		mac_edits  #$version
+		#sed -i  _bk "s:/var/lib/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/cassandra.yaml
+		#sed -i  _bk "s:/var/log/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/log4j-server.properties 
+	fi
+
+#DataStax Enterprise Download
+elif [ $product = dse ]; then
+ 	echo "Downloading DSE ${version}"
+ 	confpath=$entpath
+ 	ctype=enterprise
+	curl -L http://$user:$pass@downloads.datastax.com/enterprise/dse-${version}-bin.tar.gz | tar xz ; 
+
+	if [ ! -d "${dsxdir}enterprise" ]; then
+       mkdir -p ${dsxdir}enterprise
+	fi
+
+	mv dse-${version} ${dsxdir}enterprise/${version}
+	enterprise_check
+	#Need slightly different args for sed since Linux and Mac(BSD) operate with diff args
+	if [ "$(uname)" == "Linux" ]; then
+
+		#sed -i  "s:/var/lib/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/cassandra.yaml 
+		#sed -i  "s:/var/log/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/log4j-server.properties 
+		echo "LInux bitch!"
+		linux_edits  
+	elif [ "$(uname)" == "Darwin" ]; then
+		mac_edits  
+		echo "Mac fucker!"
+		#sed -i _bk "s:/var/lib/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/cassandra.yaml 
+		#sed -i _bk "s:/var/log/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/log4j-server.properties  
+	fi
+
+#DataStax OpsCenter Download
+elif [ $product = ops ]; then
+ 	echo "Downloading OpsCenter ${version}"
+	curl -L http://downloads.datastax.com/community/opscenter-${version}.tar.gz | tar xz; 
+
+	if [ ! -d "${dsxdir}opscenter" ]; then
+        mkdir -p ${dsxdir}opscenter
+	fi
+
+	mv opscenter-${version} ${dsxdir}opscenter/${version}
+else
+	echo "Invalid Product"
+fi
+
+
+

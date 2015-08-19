@@ -1,0 +1,73 @@
+DataStax downloader
+--------------------
+
+The DataStax Downloader is designed to allow for quick download and configuration of DataStax products for simple testing.
+It will not generate clusters for you. For that, use ctool instead.
+
+The DataStax downloader will download a tarball version of the DataStax product specified
+(DataStax Community, DataStax Enterprise, DataStax OpsCenter)
+
+After downloading the tarball, that tarball will then be extracted and the configuration files will be edited to run the product within
+the storage directory.
+
+A configuration file is required to specify where to place the extracted files as well as for credential 
+verification.
+
+SETUP
+-------------------
+
+Edit the getcassandra.cfg to include your DataStax download credentials
+These are needed for downloading DSE only
+
+Example:
+username=Maurice.moss_reynholm.com
+pwd=0118_999_881_999_119_725_3
+
+The datastax_dir is the path to where you want the files to be stored. This directory does not need to exist.
+If it does not, the datastax-downloader will create it for you. Within this directory will be a separate
+directory for each of the products
+
+$datastax_dir/enterprise
+$datastax_dir/community
+$datastax_dir/opscenter
+
+Please be sure to put the leading and trailing single quote (') as well as the trailing slash (/)
+This is how it was written to use the path so you need to format it this way 
+
+Example:
+
+datastax_dir='/home/sequoyha/DataStax/'
+
+After you have made the changes, rename the file to .getcassandra.cfg and place it in your home directory
+
+Create a symbolic link to the get-cassandra file in the dsx-downloader directory
+
+$ sudo ln -s ~/path/to/support_tool/externals/dsx-downloader/get-cassandra /usr/bin/get-cassandra
+
+To run:
+-----------------
+$ get-cassandra <product_code> <version_number>
+
+Product codes:
+
+dse: DataStax Enterprise
+dsc: DataStax Community
+ops: OpsCenter
+
+The version number is always a 3 part number. 
+
+So, to download Cassandra 1.2.12, execute the following:
+
+$ get-cassandra dsc 1.2.12
+
+You will see output similar to :
+
+$ get-cassandra dsc 1.2.12
+Downloading DataStax Community 1.2.12
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 16.1M  100 16.1M    0     0  4352k      0  0:00:03  0:00:03 --:--:-- 4352k
+
+Once it is downloaded you can switch to the $datastax_dir/product/version/bin directory to run.
+
+Enjoy.
