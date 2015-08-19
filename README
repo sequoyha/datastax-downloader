@@ -2,7 +2,7 @@ DataStax downloader
 --------------------
 
 The DataStax Downloader is designed to allow for quick download and configuration of DataStax products for simple testing.
-It will not generate clusters for you. For that, use ctool instead.
+It will not generate clusters for you.
 
 The DataStax downloader will download a tarball version of the DataStax product specified
 (DataStax Community, DataStax Enterprise, DataStax OpsCenter)
@@ -16,7 +16,7 @@ verification.
 SETUP
 -------------------
 
-Edit the getcassandra.cfg to include your DataStax download credentials
+Edit the getdatastax.cfg to include your DataStax download credentials
 These are needed for downloading DSE only
 
 Example:
@@ -38,15 +38,15 @@ Example:
 
 datastax_dir='/home/sequoyha/DataStax/'
 
-After you have made the changes, rename the file to .getcassandra.cfg and place it in your home directory
+After you have made the changes, rename the file to .getdatastax.cfg and place it in your home directory
 
-Create a symbolic link to the get-cassandra file in the dsx-downloader directory
+Create a symbolic link to the get-datastax file in the datastax-downloader directory
 
-$ sudo ln -s ~/path/to/support_tool/externals/dsx-downloader/get-cassandra /usr/bin/get-cassandra
+$ sudo ln -s ~/path/to/datastax-downloader/get-datastax /usr/local/bin/get-datastax
 
 To run:
 -----------------
-$ get-cassandra <product_code> <version_number>
+$ get-datastax <product_code> <version_number>
 
 Product codes:
 
@@ -67,6 +67,8 @@ Downloading DataStax Community 1.2.12
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 16.1M  100 16.1M    0     0  4352k      0  0:00:03  0:00:03 --:--:-- 4352k
+Editing cassandra.yaml and logging file to write to /your/configured/path/
+Done.
 
 Once it is downloaded you can switch to the $datastax_dir/product/version/bin directory to run.
 

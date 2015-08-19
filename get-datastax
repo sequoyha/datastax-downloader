@@ -5,7 +5,7 @@ version=$2
 
 communitypath='/conf/'
 entpath='/resources/cassandra/conf/'
-source ~/.getcassandra.cfg
+source ~/.getdatastax.cfg
 
 user=$username
 pass=$pwd
@@ -107,4 +107,4 @@ else
 fi
 
 
-echo "Done"
+echo "Done."
