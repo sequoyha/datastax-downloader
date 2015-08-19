@@ -21,11 +21,9 @@ These are needed for downloading DSE only
 
 Example:
 
-
-```
 username=Maurice.moss_reynholm.com
 pwd=0118_999_881_999_119_725_3
-```
+
 
 The datastax_dir is the path to where you want the files to be stored. This directory does not need to exist.
 If it does not, the datastax-downloader will create it for you. Within this directory will be a separate
@@ -40,22 +38,19 @@ This is how it was written to use the path so you need to format it this way
 
 Example:
 
-`datastax_dir='/home/sequoyha/DataStax/'`
+datastax_dir='/home/sequoyha/DataStax/'
 
 After you have made the changes, rename the file to .getdatastax.cfg and place it in your home directory
 
 Create a symbolic link to the get-datastax file in the datastax-downloader directory
 
-```
 $ sudo ln -s ~/path/to/datastax-downloader/get-datastax /usr/local/bin/get-datastax
-```
 
 To run:
 -----------------
 
-```
+
 $ get-datastax <product_code> <version_number>
-```
 
 Product codes:
 
@@ -67,13 +62,10 @@ The version number is always a 3 part number.
 
 So, to download Cassandra 1.2.12, execute the following:
 
-```
 $ get-cassandra dsc 1.2.12
-```
 
 You will see output similar to :
 
-```
 $ get-cassandra dsc 1.2.12
 Downloading DataStax Community 1.2.12
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -81,7 +73,6 @@ Downloading DataStax Community 1.2.12
 100 16.1M  100 16.1M    0     0  4352k      0  0:00:03  0:00:03 --:--:-- 4352k
 Editing cassandra.yaml and logging file to write to /your/configured/path/
 Done.
-```
 
 Once it is downloaded you can switch to the $datastax_dir/product/version/bin directory to run.
 
