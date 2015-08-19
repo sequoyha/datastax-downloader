@@ -10,31 +10,26 @@ source ~/.getcassandra.cfg
 user=$username
 pass=$pwd
 dsxdir=$datastax_dir
+
 logback=false
 
 function linux_edits() 
 {
-	echo "Logback is " $logback
     	sed -i  "s:/var/lib/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/cassandra.yaml 
     	if [ $logback == true ]; then
-    		echo "In C2.1 edits"
     		sed -i  "s:\${cassandra.logdir}:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}logback.xml 
     	else
-		echo "In non C 2.1 edits"
-			sed -i  "s:/var/log/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties #change to logback stuff
+			sed -i  "s:/var/log/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties
     	fi
 }
 
 function mac_edits() 
 {
-	echo "Logback is " $logback
 	sed -i  _bk "s:/var/lib/cassandra:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/cassandra.yaml 
 	if [ $logback == true ]; then
-		echo "In C2.1 edits"
 		sed -i  _bk "s:\${cassandra.logdir}:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}logback.xml
 	else
-		echo "In non C 2.1 edits"
-		sed -i  _bk "s:/var/log/cassandra:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties #change to logback stuff
+		sed -i  _bk "s:/var/log/cassandra:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties
 	fi
 }
 function community_check()
@@ -70,13 +65,9 @@ if [ $product = dsc ]; then
 	community_check
 	#Need slightly different args for sed since Linux and Mac(BSD) operate with diff args
 	if [ "$(uname)" == "Linux" ]; then
-		linux_edits  #$version
-		#sed -i  "s:/var/lib/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/cassandra.yaml
-		#sed -i  "s:/var/log/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/log4j-server.properties 
+		linux_edits				 
 	elif [ "$(uname)" == "Darwin" ]; then
-		mac_edits  #$version
-		#sed -i  _bk "s:/var/lib/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/cassandra.yaml
-		#sed -i  _bk "s:/var/log/cassandra:${dsxdir}community/${version}:g" ${dsxdir}community/${version}/conf/log4j-server.properties 
+		mac_edits   
 	fi
 
 #DataStax Enterprise Download
@@ -94,16 +85,9 @@ elif [ $product = dse ]; then
 	enterprise_check
 	#Need slightly different args for sed since Linux and Mac(BSD) operate with diff args
 	if [ "$(uname)" == "Linux" ]; then
-
-		#sed -i  "s:/var/lib/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/cassandra.yaml 
-		#sed -i  "s:/var/log/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/log4j-server.properties 
-		echo "LInux bitch!"
-		linux_edits  
+                linux_edits  
 	elif [ "$(uname)" == "Darwin" ]; then
-		mac_edits  
-		echo "Mac fucker!"
-		#sed -i _bk "s:/var/lib/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/cassandra.yaml 
-		#sed -i _bk "s:/var/log/cassandra:${dsxdir}enterprise/${version}:g" ${dsxdir}enterprise/${version}/resources/cassandra/conf/log4j-server.properties  
+		mac_edits		  
 	fi
 
 #DataStax OpsCenter Download
