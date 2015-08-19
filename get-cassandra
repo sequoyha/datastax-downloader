@@ -15,16 +15,18 @@ logback=false
 
 function linux_edits() 
 {
+	echo "Editing cassandra.yaml and logging file to write to ${dsxdir}"
     	sed -i  "s:/var/lib/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/cassandra.yaml 
     	if [ $logback == true ]; then
     		sed -i  "s:\${cassandra.logdir}:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}logback.xml 
     	else
-			sed -i  "s:/var/log/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties
+		sed -i  "s:/var/log/cassandra:${dsxdir}${ctype}/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/log4j-server.properties
     	fi
 }
 
 function mac_edits() 
 {
+	echo "Editing cassandra.yaml and logging file to write to ${dsxdir}"
 	sed -i  _bk "s:/var/lib/cassandra:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}/cassandra.yaml 
 	if [ $logback == true ]; then
 		sed -i  _bk "s:\${cassandra.logdir}:${dsxdir}$ctype/${version}:g" ${dsxdir}${ctype}/${version}${confpath}logback.xml
@@ -105,4 +107,4 @@ else
 fi
 
 
-
+echo "Done"
