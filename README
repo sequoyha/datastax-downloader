@@ -60,11 +60,11 @@ The version number is always a 3 part number.
 
 So, to download Cassandra 1.2.12, execute the following:
 
-$ get-cassandra dsc 1.2.12
+$ get-datastax dsc 1.2.12
 
 You will see output similar to :
 
-$ get-cassandra dsc 1.2.12
+$ get-datastax dsc 1.2.12
 Downloading DataStax Community 1.2.12
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
